@@ -4,7 +4,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.utils import executor
 
-API_TOKEN = 'YOUR_API_TOKEN_HERE'
+API_TOKEN = '8475319275:AAGbmiHydxc62DlkrPx1CAoUIe-1Z6isLww'
 
 logging.basicConfig(level=logging.INFO)
 
