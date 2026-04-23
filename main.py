@@ -1,103 +1,57 @@
 import logging
-from aiogram import Bot, Dispatcher, types
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram.dispatcher import FSMContext
-from aiogram.utils import executor
+from telegram import Update
+from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
 
-API_TOKEN = '8475319275:AAGbmiHydxc62DlkrPx1CAoUIe-1Z6isLww'
+# Configurazione Logging
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
 
-logging.basicConfig(level=logging.INFO)
+# --- Gestori dei Comandi (Handlers) ---
 
-bot = Bot(token=API_TOKEN)
-dispatcher = Dispatcher(bot, storage=MemoryStorage())
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Welcome to the OSINT Bot! Use /help to see available commands.")
 
+async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    help_text = (
+        "Available commands:\n"
+        "/user_search - Search for a user\n"
+        "/phone_lookup - Lookup a phone number\n"
+        "/email_search - Search for an email\n"
+        "/domain_info - Get information about a domain\n"
+        "/ip_lookup - Lookup an IP address\n"
+        "/breach_check - Check if an email was breached\n"
+        "/image_search - Search for an image\n"
+        "/vpn_check - Verify VPN usage"
+    )
+    await update.message.reply_text(help_text)
 
-async def start(message: types.Message):
-    await message.answer("Welcome to the OSINT Bot! Use /help to see available commands.")
-
-
-async def help_command(message: types.Message):
-    help_text = "Available commands:\n /user_search - Search for a user\n /phone_lookup - Lookup a phone number\n /email_search - Search for an email\n /domain_info - Get information about a domain\n /ip_lookup - Lookup an IP address\n /breach_check - Check if an email was breached\n /image_search - Search for an image\n /vpn_check - Verify VPN usage"
-    await message.answer(help_text)
-
-
-async def user_search(message: types.Message):
-    # Implementation of user search function
-    await message.answer("User search not yet implemented.")
-
-
-async def social_finder(message: types.Message):
-    # Implementation of social finder function
-    await message.answer("Social finder not yet implemented.")
-
-
-async def phone_lookup(message: types.Message):
-    # Implementation of phone lookup function
-    await message.answer("Phone lookup not yet implemented.")
-
-
-async def verify_phone(message: types.Message):
-    # Implementation of phone verification function
-    await message.answer("Phone verification not yet implemented.")
-
-
-async def email_search(message: types.Message):
-    # Implementation of email search function
-    await message.answer("Email search not yet implemented.")
-
-
-async def verify_email(message: types.Message):
-    # Implementation of email verification function
-    await message.answer("Email verification not yet implemented.")
-
-
-async def domain_info(message: types.Message):
-    # Implementation of domain info function
-    await message.answer("Domain info not yet implemented.")
-
-
-async def dns_records(message: types.Message):
-    # Implementation of DNS records function
-    await message.answer("DNS records lookup not yet implemented.")
-
-
-async def ip_lookup(message: types.Message):
-    # Implementation of IP lookup function
-    await message.answer("IP lookup not yet implemented.")
-
-
-async def vpn_check(message: types.Message):
-    # Implementation of VPN check function
-    await message.answer("VPN check not yet implemented.")
-
-
-async def image_search(message: types.Message):
-    # Implementation of image search function
-    await message.answer("Image search not yet implemented.")
-
-
-async def breach_check(message: types.Message):
-    # Implementation of breach check function
-    await message.answer("Breach check not yet implemented.")
-
-
-def main():
-    dispatcher.register_message_handler(start, commands=['start'])
-    dispatcher.register_message_handler(help_command, commands=['help'])
-    dispatcher.register_message_handler(user_search, commands=['user_search'])
-    dispatcher.register_message_handler(phone_lookup, commands=['phone_lookup'])
-    dispatcher.register_message_handler(verify_phone, commands=['verify_phone'])
-    dispatcher.register_message_handler(email_search, commands=['email_search'])
-    dispatcher.register_message_handler(verify_email, commands=['verify_email'])
-    dispatcher.register_message_handler(domain_info, commands=['domain_info'])
-    dispatcher.register_message_handler(dns_records, commands=['dns_records'])
-    dispatcher.register_message_handler(ip_lookup, commands=['ip_lookup'])
-    dispatcher.register_message_handler(vpn_check, commands=['vpn_check'])
-    dispatcher.register_message_handler(image_search, commands=['image_search'])
-    dispatcher.register_message_handler(breach_check, commands=['breach_check'])
-
-    executor.start_polling(dispatcher, skip_updates=True)
-
+# Placeholder per le funzioni OSINT
+async def unimplemented(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("This OSINT function is not yet implemented.")
 
 if __name__ == '__main__':
-    main()
+    # Sostituisci 'IL_TUO_TOKEN_QUI' con il tuo vero API Token
+    TOKEN = '8475319275:AAGbmiHydxc62DlkrPx1CAoUIe-1Z6isLww'
+
+    # Costruzione dell'applicazione
+    application = ApplicationBuilder().token(TOKEN).build()
+    
+    # Registrazione dei comandi
+    application.add_handler(CommandHandler('start', start))
+    application.add_handler(CommandHandler('help', help_command))
+    
+    # Mappatura dei comandi non implementati
+    osint_commands = [
+        'user_search', 'phone_lookup', 'verify_phone', 'email_search', 
+        'verify_email', 'domain_info', 'dns_records', 'ip_lookup', 
+        'vpn_check', 'image_search', 'breach_check'
+    ]
+    
+    for cmd in osint_commands:
+        application.add_handler(CommandHandler(cmd, unimplemented))
+
+    # Avvio del bot
+    print("Bot in ascolto...")
+    application.run_polling()
