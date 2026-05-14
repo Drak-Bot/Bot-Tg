@@ -23,7 +23,8 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "/ip_lookup - Lookup an IP address\n"
         "/breach_check - Check if an email was breached\n"
         "/image_search - Search for an image\n"
-        "/vpn_check - Verify VPN usage"
+        "/vpn_check - Verify VPN usage\n"
+        "/instagram_lookup - Verify insta"
     )
     await update.message.reply_text(help_text)
 
@@ -46,7 +47,7 @@ if __name__ == '__main__':
     osint_commands = [
         'user_search', 'phone_lookup', 'verify_phone', 'email_search', 
         'verify_email', 'domain_info', 'dns_records', 'ip_lookup', 
-        'vpn_check', 'image_search', 'breach_check'
+        'vpn_check', 'image_search', 'instagram_lookup', 'breach_check'
     ]
     
     for cmd in osint_commands:
